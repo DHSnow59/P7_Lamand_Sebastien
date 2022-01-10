@@ -5,7 +5,7 @@ module.exports = (sequelize, Sequelize) => {
             primaryKey: true,
             autoIncrement: true,
         },
-        username: {
+        pseudo: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
@@ -15,15 +15,13 @@ module.exports = (sequelize, Sequelize) => {
             required: true,
             allowNull: false,
         },
-        password: {
+        mdp: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
         },
         role: {
             type: Sequelize.INTEGER,
-            required: true,
-            allowNull: false,
             defaultValue: 0,
         },
     });

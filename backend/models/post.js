@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
         },
         image_url: {
             type: Sequelize.STRING,
-            required: false,
+            required: true,
             allowNull: false,
         },
     });
