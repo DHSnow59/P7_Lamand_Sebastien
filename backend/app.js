@@ -4,6 +4,8 @@ const app = express();
 
 //Importation du router user
 const userRoutes = require('./routes/user');
+const postRoutes = require('./routes/post');
+const commentRoutes = require('./routes/comment');
 
 app.use(express.json());
 
@@ -21,5 +23,9 @@ db.sequelize.sync({
 });
 
 app.use('/api/users', userRoutes);
+//Nous voulons enregistrer notre routeur pour toutes les demandes effectuées vers /api/post
+app.use('/api/posts', postRoutes);
+//Nous voulons enregistrer notre routeur pour toutes les demandes effectuées vers /api/comment
+app.use('/api/comments', commentRoutes);
 
 module.exports = app;
