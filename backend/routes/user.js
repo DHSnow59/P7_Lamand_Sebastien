@@ -1,5 +1,7 @@
 //Importation d'express
 const express = require('express');
+//Importation AUTH
+const auth = require('../midlleware/auth');
 
 //Creation du router
 const router = express.Router();
@@ -14,9 +16,9 @@ router.post('/signup', userControllers.signup);
 //Router pour l'identification d'utilisateur
 router.post('/login', userControllers.login);
 
-router.get('/', userControllers.getAllUser);
+router.get('/', auth, userControllers.getAllUser);
 
-router.delete('/:id', userControllers.deleteUserById);
+router.delete('/:id', auth, userControllers.deleteUserById);
 
 //Exportation des routers
 module.exports = router;

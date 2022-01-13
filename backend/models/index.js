@@ -24,8 +24,8 @@ db.sequelize = sequelize;
 //Models/tables
 // importation des models juste en dessous 
 db.user = require("../models/user.js")(sequelize, Sequelize);
-db.user = require("../models/post.js")(sequelize, Sequelize);
-db.user = require("../models/comment.js")(sequelize, Sequelize);
+db.post = require("../models/post.js")(sequelize, Sequelize);
+db.comment = require("../models/comment.js")(sequelize, Sequelize);
 
 // RELATION ONETOMANY //
 

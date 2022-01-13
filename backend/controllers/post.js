@@ -9,10 +9,10 @@ exports.createPost = (req, res, next) => {
         ...postObject,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         // On initialise les likes/dislikes et les tableaux likes/dislikes a 0  
-        likes: 0,
+        /*likes: 0,
         dislikes: 0,
         usersLiked: [],
-        usersDisliked: []
+        usersDisliked: []*/
     });
     post.save()
         .then(() => res.status(201).json({ message: 'Poste enregistré !' }))

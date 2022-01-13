@@ -15,7 +15,7 @@ module.exports = (sequelize, Sequelize) => {
             required: true,
             allowNull: false,
         },
-        mdp: {
+        password: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,

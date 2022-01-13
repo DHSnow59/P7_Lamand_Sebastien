@@ -1,27 +1,26 @@
 // importation du model User
-const User = require('../models/user');
+const db = require("../models");
+const User = db.user;
 // importation du model bcrypt
 const bcrypt = require("bcryptjs");
 // importation du model jsonwebtoken
 const jwt = require("jsonwebtoken");
+const user = require("../models/user");
 
 
 // fonction pour enregistrement de nouveau utilisateur
 exports.signup = (req, res, next) => {
-    bcrypt.hash(req.body.password, 10).then((hash) => {
-        const user = new User({
+    User.create({
+            pseudo: req.body.pseudo,
             email: req.body.email,
-            password: hash,
+            password: bcrypt.hashSync(req.body.password, 8),
+        })
+        .then((user) => {
+            res.send({ message: "User was registered successfully!" });
+        })
+        .catch((err) => {
+            res.status(500).send({ message: err.message });
         });
-        user
-            .save()
-            .then(() => res.status(201).json({ message: "Utilisateur créé !" }))
-            .catch(() =>
-                res.status(400).json({
-                    message: "Un utilisateur existe déjà avec cette adresse e-mail",
-                })
-            );
-    });
 };
 
 // fonction login pour connecter les utilisateurs existant
@@ -48,10 +47,20 @@ exports.login = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
+// Récupération de la liste des Users 
 exports.getAllUser = (req, res, next) => {
-
+    User.find()
+        .then(things => res.status(200).json(things))
+        .catch(error => res.status(400).json({ error }));
 };
 
+//Suppression de l'utilisateur par son ID
 exports.deleteUserById = (req, res, next) => {
-
+    User.findOne({ _id: req.params.id })
+        .then(user => {
+            User.deleteOne({ _id: req.params.id })
+                .then(() => res.status(200).json({ message: 'Utilisateur supprimé !' }))
+                .catch(error => res.status(400).json({ error }));
+        })
+        .catch(error => res.status(500).json({ error }));
 };
