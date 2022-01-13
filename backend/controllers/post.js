@@ -33,6 +33,11 @@ exports.deletePost = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
+//Modification des postes existant
+exports.modifyPost = (req, res, next) => {
+    // Algo modif
+};
+
 //Récupération d'un post dans la base de donnée
 exports.getOnePost = (req, res, next) => {
     Post.findOne({ _id: req.params.id })

@@ -12,6 +12,8 @@ const postControllers = require('../controllers/post');
 
 //Enregistrement des Posts dans la base de données
 router.post('/', auth, multer, postControllers.createPost);
+// Modification d'un poste 
+router.put('/:id', auth, multer, postControllers.modifyPost);
 // Suppression d'un post
 router.delete('/:id', auth, postControllers.deletePost);
 //Récupération d'un post spécifique
