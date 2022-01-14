@@ -1,5 +1,6 @@
 const Post = require('../models/post');
 const fs = require('fs');
+const post = require('../models/post');
 
 // Création d'un nouveau post
 exports.createPost = (req, res, next) => {
@@ -35,7 +36,28 @@ exports.deletePost = (req, res, next) => {
 
 //Modification des postes existant
 exports.modifyPost = (req, res, next) => {
-    // Algo modif
+    Post.findOne({ _id: req.params.id })
+        .then(post => {
+            if (req.file) {
+                const filename = sauce.imageUrl.split('/images/')[1];
+                fs.unlink(`images/${filename}`, () => {
+                    const postObject = req.file ? {
+                        ...JSON.parse(req.body.post),
+                        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+                    } : {...req.body };
+                    Post.updateOne({ _id: req.params.id }, {...postObject, _id: req.params.id })
+                        .then(() => res.status(200).json({ message: 'Poste modifié !' }))
+                        .catch(error => res.status(400).json({ error }));
+                });
+            } else {
+                const postObject = req.body;
+                Post.updateOne({ _id: req.params.id }, {...postObject, _id: req.params.id })
+                    .then(() => res.status(200).json({ message: 'Poste modifié !' }))
+                    .catch(error => res.status(400).json({ error }));
+            }
+        })
+        .catch(error => res.status(500).json({ error }));
+
 };
 
 //Récupération d'un post dans la base de donnée
