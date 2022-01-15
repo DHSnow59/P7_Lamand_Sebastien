@@ -20,11 +20,11 @@ module.exports = (sequelize, Sequelize) => {
             required: true,
             allowNull: false,
         },
-        image_url: {
+        /*image_url: {
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
-        },
+        },*/
     });
 
     return Post;

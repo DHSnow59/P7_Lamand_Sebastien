@@ -18,9 +18,9 @@ app.use((req, res, next) => {
 
 //Importation des models et on syncronise avec la BDD 
 const db = require("./models");
-db.sequelize.sync({
-    force: true
-});
+db.sequelize.sync(
+
+);
 
 app.use('/api/users', userRoutes);
 //Nous voulons enregistrer notre routeur pour toutes les demandes effectuées vers /api/post
