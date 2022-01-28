@@ -28,7 +28,7 @@ exports.deletePost = (req, res, next) => {
 };
 
 //Modification des postes existant
-exports.modifyPost = (req, res, next) => { // A modifier à adapter en MYSQL 
+exports.modifyPost = (req, res, next) => {
     Post.findByPk(req.params.id)
         .then(post => {
             if (req.file) {
