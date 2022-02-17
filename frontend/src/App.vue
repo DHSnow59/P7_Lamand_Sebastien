@@ -1,58 +1,141 @@
 <template>
-  <v-card>
-    <v-navigation-drawer
-      v-model="drawer"
-      :mini-variant.sync="mini"
-      permanent
-    >
-      <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
-        </v-list-item-avatar>
+  <header class="header">
+    <nav class="header__nav">
+      <div class="header__nav__home" v-if="currentUser">
+        <li class="header__nav__home__li">
+          <router-link to="/" class="nav-link">Home</router-link>
+        </li>
+      </div>
+      <div class="header__nav__adminboard" v-if="currentUser">
+        <li class="header__nav__adminboard__li">
+          <router-link to="/AdminBoard" class="nav-link">AdminBoard</router-link>
+        </li>
+      </div>
+      <div class="header__nav__LS" v-if="!currentUser">
+        <li class="header__nav__LS__li">
+          <router-link to="/register" class="nav-link">Sign Up </router-link>
+        </li>
+        <li class="header__nav__LS__li">
+          <router-link to="/login" class="nav-link">Login</router-link>
+        </li>
+      </div>
 
-        <v-list-item-title>John Leider</v-list-item-title>
+      <div class="header__nav__logOut" v-if="currentUser">
+        <li class="header__nav__logOut__li">
+          <router-link to="/profile" class="nav-link">Profile</router-link>
+        </li>
+        <li class="header__nav__logOut__li">
+          <a class="nav-link" @click.prevent="logOut">LogOut</a>
+        </li>
+      </div>
+    </nav>
+  </header>
 
-        <v-btn
-          icon
-          @click.stop="mini = !mini"
-        >
-          <v-icon>mdi-chevron-left</v-icon>
-        </v-btn>
-      </v-list-item>
-
-      <v-divider></v-divider>
-
-      <v-list dense>
-        <v-list-item
-          v-for="item in items"
-          :key="item.title"
-          link
-        >
-          <v-list-item-icon>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-  </v-card>
+  <div class="core">
+    <router-view />
+  </div>
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        drawer: true,
-        items: [
-          { title: 'Home', icon: 'mdi-home-city' },
-          { title: 'My Account', icon: 'mdi-account' },
-          { title: 'Users', icon: 'mdi-account-group-outline' },
-        ],
-        mini: true,
-      }
+export default {
+  name: 'App',
+  computed: {
+    signUp() {
+      return this.$store.state.status.register;
     },
-  }
+    currentUser() {
+      return this.$store.state.auth.user;
+    },
+  },
+  mounted() {
+    if (this.currentUser) {
+      this.$router.push("/login");
+    }
+  },
+  methods: {
+    logOut() {
+      this.$store.dispatch("auth/logout");
+      this.$router.push("/register");
+    },
+  },
+};
 </script>
+
+<style lang="scss">
+body {
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Merriweather:ital,wght@1,700&family=Roboto:ital,wght@1,300&display=swap');
+  font-family: 'Roboto', sans-serif;
+  margin: 0px;
+}
+#app {
+  .header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 1rem 2rem 1rem;
+    border-bottom: 1px solid rgb(221, 216, 216);
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 20px;
+    &__logo {
+      height: 3rem;
+      margin-right: 1rem;
+    }
+    &__nav {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-right: 3rem;
+      display: flex;
+      flex-direction: row;
+      &__home {
+        list-style-type: none;
+        &__li > * {
+          text-decoration: none;
+          color: blue;
+        }
+      }
+      &__adminboard {
+        list-style-type: none;
+        &__li > * {
+          margin-left: 0.5rem;
+          text-decoration: none;
+          color: blue;
+        }
+      }
+      &__LS {
+        display: flex;
+        flex-direction: row;
+        list-style-type: none;
+        gap: 0.5rem;
+        &__li > * {
+          text-decoration: none;
+          color: blue;
+        }
+      }
+      &__logOut {
+        display: flex;
+        flex-direction: row;
+        list-style-type: none;
+        &__li > * {
+          margin-left: 0.5rem;
+          text-decoration: none;
+          color: blue;
+        }
+      }
+    }
+  }
+  .core {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    color: #2c3e50;
+    background-color: rgb(28, 47, 77);
+  }
+}
+@media (max-width: 550px){
+  .header {
+    flex-wrap: wrap;
+    &__logo {
+      margin-bottom: 1rem;
+    }
+  }
+}
+</style>
