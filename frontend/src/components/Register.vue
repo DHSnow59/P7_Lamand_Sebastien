@@ -8,7 +8,7 @@
       >
         <div class="container__bloc__form__checked" v-if="!successful">
           <div class="container__bloc__form__checked__item">
-            <label for="username">Username</label>
+            <label for="username">Pseudo</label>
             <Field class="container__bloc__form__checked__item__field" name="username" type="text" />
             <ErrorMessage name="username" class="error-feedback" />
           </div>
@@ -82,16 +82,6 @@ export default {
       schema,
     };
   },
-  computed: {
-    loggedIn() {
-      return this.$store.state.auth.status.loggedIn;
-    },
-  },
-  mounted() {
-    if (this.loggedIn) {
-      this.$router.push("/profile");
-    }
-  },
   methods: {
     handleRegister(user) {
       this.message = "";
@@ -117,6 +107,16 @@ export default {
         }
       );
     },
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.state.auth.status.loggedIn;
+    },
+  },
+  mounted() {
+    if (this.loggedIn) {
+      this.$router.push("/profile");
+    }
   },
 };
 </script>

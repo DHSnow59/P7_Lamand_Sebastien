@@ -1,12 +1,10 @@
 const db = require('../models');
 const Comment = db.comment;
-const fs = require('fs');
-
-
 
 // Création d'un nouveau commentaire
 exports.createComment = (req, res, next) => {
     const comment = {
+        postId: req.body.post_id,
         ...req.body,
     }
     Comment.create(comment)

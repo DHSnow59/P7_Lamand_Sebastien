@@ -15,9 +15,6 @@ class PostService {
     getAllPost() {
         return axios.get(API_URL + '/', {headers: authHeader()});
     }
-
-
-
 }
 
 export default new PostService();

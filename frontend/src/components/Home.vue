@@ -17,12 +17,12 @@
           <div class="container__main__post__comments__content"><p>"{{ comments.contenu }}"</p></div>
           <div class="container__main__post__comments__date">
             <p class="container__main__post__comments__date__p"><strong>&ensp;&ensp;&ensp;&ensp;Crée le: </strong>{{ comments.createdAt.split("T")[0] + " à " + comments.createdAt.split("T")[1].split(".")[0] }}</p>
-            <button class="container__main__post__comments__date__button" @click="deleteComments(comments.id)" v-if="currentUser.user.username === comments.auteur">Sup</button>
+            <button class="container__main__post__comments__date__button" @click="deleteComments(comments.id)" v-if="currentUser.user.username === comments.auteur || currentUser.user.role == 1">Sup</button>
           </div>        
         </div>
         <div class="container__main__post__button">
           <p class="container__main__post__button__date"><strong>&ensp;&ensp;Crée le: </strong>{{ item.createdAt.split("T")[0] + " à " + item.createdAt.split("T")[1].split(".")[0]}}</p>
-          <button class="container__main__post__button__field" @click="deletePost(item.id)" v-if="currentUser.user.username === item.auteur">Sup</button>
+          <button class="container__main__post__button__field" @click="deletePost(item.id)" v-if="currentUser.user.username === item.auteur || currentUser.user.role == 1">Sup</button>
         </div>
       </div>
     </div>
@@ -46,18 +46,16 @@ export default {
   },
   computed: {
     currentUser() {
-      console.log(this.$store.state.auth.user.user.username)
       return this.$store.state.auth.user
     },
   },
   mounted() {
     if (!this.currentUser) {
       this.$router.push("/login");
-    }
+    };
     ArticlesService.getAllPost().then(
       (response) => {
         this.content = response.data;
-        console.log(this.content)
       },
       (error) => {
         this.content =

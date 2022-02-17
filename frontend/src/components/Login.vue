@@ -7,7 +7,7 @@
         :validation-schema="schema"
       >
         <div class="container__bloc__form__item">
-          <label for="username">Username</label>
+          <label for="username">Pseudo</label>
           <Field class="container__bloc__form__item__field" name="username" type="text"/>
           <ErrorMessage name="username" class="error-feedback" />
         </div>

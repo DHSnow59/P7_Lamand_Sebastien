@@ -5,12 +5,14 @@ module.exports = (sequelize, Sequelize) => {
             primaryKey: true,
             autoIncrement: true,
         },
-        pseudo: {
+        username: {
+            unique: true,
             type: Sequelize.STRING,
             required: true,
             allowNull: false,
         },
         email: {
+            unique: true,
             type: Sequelize.STRING,
             required: true,
             allowNull: false,

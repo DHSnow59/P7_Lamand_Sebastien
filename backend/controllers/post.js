@@ -1,68 +1,55 @@
 const db = require('../models');
 const Post = db.post;
+const Comment = db.comment;
 const fs = require('fs');
 
 // Création d'un nouveau post
-exports.createPost = (req, res, next) => {
+exports.createPost = (req, res) => {
+    // Create a post //
     const post = {
-        ...req.body,
-        /*imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,*/
-        // On initialise les likes/dislikes et les tableaux likes/dislikes a 0  
-        /*likes: 0,
-        dislikes: 0,
-        usersLiked: [],
-        usersDisliked: []*/
+      userId: req.body.userId,
+      titre: req.body.title,
+      auteur: req.body.creator,
+      user_id: req.body.userId,
+      contenu: req.body.content,
+      image_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     };
+    // Save Aricle in the database //
     Post.create(post)
-        .then(() => res.status(201).json({ message: 'Poste enregistré !' }))
-        .catch(error => res.status(400).json({ error }));
-};
+      .then((data) => {
+        res.send(data);
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message:
+            err.message || "Some error occurred while creating the article.",
+        });
+      });
+  };
 
 //Suppression d'un post
 exports.deletePost = (req, res, next) => {
-    Post.destroy({ where: { id: req.params.id } })
-        .then(post => {
-            res.send({ message: "poste supprimé" });
-        })
-        .catch(error => res.status(500).json({ error }));
-};
-
-//Modification des postes existant
-exports.modifyPost = (req, res, next) => {
-    Post.findByPk(req.params.id)
-        .then(post => {
-            if (req.file) {
-                const filename = sauce.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
-                    const postObject = req.file ? {
-                        ...JSON.parse(req.body.post),
-                        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-                    } : {...req.body };
-                    Post.update(postObject, { where: { id: req.params.id } })
-                        .then(() => res.status(200).json({ message: 'Poste modifié !' }))
-                        .catch(error => res.status(400).json({ error }));
-                });
-            } else {
-
-                Post.update(req.body, { where: { id: req.params.id } })
-                    .then(() => res.status(200).json({ message: 'Poste modifié !' }))
-                    .catch(error => res.status(400).json({ error }));
-            }
-        })
-        .catch(error => res.status(500).json({ error }));
-
-};
-
-//Récupération d'un post dans la base de donnée
-exports.getOnePost = (req, res, next) => {
-    Post.findOne({ _id: req.params.id })
-        .then(thing => res.status(200).json(thing))
-        .catch(error => res.status(404).json({ error }));
+    const id = req.params.id
+    Post.findByPk(id)
+    .then((post) => {
+        const filename = post.image_url.split('/images/')[1];
+        console.log(filename)
+        fs.unlink(`images/${filename}`, () => {
+            Post.destroy({ where: { id: req.params.id } })
+            .then(post => {
+                res.send({ message: "poste supprimé" });
+            })
+            .catch(error => res.status(500).json({ error }));
+            });
+    })
+    .catch((err) => {
+      res.status(500).send({err});
+    });
 };
 
 //Récupération de la liste des postes
 exports.getAllPost = (req, res, next) => {
-    Post.findAll()
+    Post.findAll({ include: Comment })
         .then(things => res.status(200).json(things))
         .catch(error => res.status(400).json({ error }));
 };

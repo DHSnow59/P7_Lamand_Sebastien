@@ -5,27 +5,42 @@ const User = db.user;
 const bcrypt = require("bcryptjs");
 // importation du model jsonwebtoken
 const jwt = require("jsonwebtoken");
-const user = require("../models/user");
+const dotenv = require("dotenv").config({ encoding: "latin1" });
+const Joi = require("joi");
 
 
 // fonction pour enregistrement de nouveau utilisateur
 exports.signup = (req, res, next) => {
-    User.create({
-            pseudo: req.body.pseudo,
-            email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, 8),
-        })
-        .then((user) => {
-            res.send({ message: "User was registered successfully!" });
-        })
-        .catch((err) => {
-            res.status(500).send({ message: err.message });
-        });
+    // Ici on vérifie le formatage  des données utilisateurs 
+    const schema = Joi.object().keys({
+        username: Joi.string().min(2).required(),
+        email: Joi.string().regex(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,10})+$/).required(),
+        password: Joi.string().min(6).required(),
+    })
+    if (schema.validate(req.body).error) {
+        res.send(schema.validate(req.body).error)
+    } else {
+        User.create({
+                username: req.body.username,
+                email: req.body.email,
+                password: bcrypt.hashSync(req.body.password, 8),
+            })
+            .then(() => {
+                res.send({ message: "User was registered successfully!" });
+            })
+            .catch((err) => {
+                res.status(500).send({ message: err.message });
+            });
+    }
 };
 
 // fonction login pour connecter les utilisateurs existant
 exports.login = (req, res, next) => {
-    User.findOne({ email: req.body.email })
+    User.findOne({
+            where: {
+                username: req.body.username,
+            },
+        })
         .then(user => {
             if (!user) {
                 return res.status(401).json({ message: 'Utilisateur non trouvé !' });
@@ -36,9 +51,9 @@ exports.login = (req, res, next) => {
                         return res.status(401).json({ message: 'Mot de passe incorrect !' });
                     }
                     res.status(200).json({
-                        userId: user._id,
-                        token: jwt.sign({ userId: user._id },
-                            'RANDOM_TOKEN_SECRET', { expiresIn: '24h' }
+                        user: user,
+                        accessToken: jwt.sign({ userId: user._id },
+                            process.env.SECRET_KEY, { expiresIn: '24h' }
                         )
                     });
                 })
@@ -49,18 +64,19 @@ exports.login = (req, res, next) => {
 
 // Récupération de la liste des Users 
 exports.getAllUser = (req, res, next) => {
-    User.find()
-        .then(things => res.status(200).json(things))
+    User.findAll()
+        .then(users => res.status(200).json(users))
         .catch(error => res.status(400).json({ error }));
 };
 
 //Suppression de l'utilisateur par son ID
 exports.deleteUserById = (req, res, next) => {
-    User.findOne({ _id: req.params.id })
-        .then(user => {
-            User.deleteOne({ _id: req.params.id })
-                .then(() => res.status(200).json({ message: 'Utilisateur supprimé !' }))
-                .catch(error => res.status(400).json({ error }));
+    console.log(req.params.id)
+    User.destroy({
+            where: { id: req.params.id },
         })
-        .catch(error => res.status(500).json({ error }));
+        .then(() => {
+            res.status(200).json({ message: 'Utilisateur supprimé !' })
+        })
+        .catch(error => res.status(400).json({ error }));
 };

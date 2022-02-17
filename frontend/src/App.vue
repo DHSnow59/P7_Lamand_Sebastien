@@ -6,7 +6,7 @@
           <router-link to="/" class="nav-link">Home</router-link>
         </li>
       </div>
-      <div class="header__nav__adminboard" v-if="currentUser">
+      <div class="header__nav__adminboard" v-if="currentUser && currentUser.user.role === 1">
         <li class="header__nav__adminboard__li">
           <router-link to="/AdminBoard" class="nav-link">AdminBoard</router-link>
         </li>
@@ -29,6 +29,11 @@
         </li>
       </div>
     </nav>
+    <img
+      class="header__logo"
+      alt="logoHeader"
+      :src="require('./assets/image/logo.png')"
+    />
   </header>
 
   <div class="core">

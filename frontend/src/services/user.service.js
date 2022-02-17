@@ -8,12 +8,9 @@ class UserService {
     getAllUsers() {
         return axios.get(API_URL + '/', {headers: authHeader()});
     }
-
     deleteUsersById(id) {
-        console.log()
         return axios.delete(API_URL + '/' + id, {headers: authHeader()});
     }
-
 }
 
 export default new UserService();

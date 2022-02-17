@@ -7,15 +7,12 @@ class CommentService {
     createComment(body) {
         return axios.post(API_URL + '/', body, {headers: authHeader()});
     }
-
     deleteComment(id) {
         return axios.delete(API_URL + '/' + id, {headers: authHeader()});
     }
-
     getAllComment() {
         return axios.get(API_URL + '/', {headers: authHeader()});
     }
-
 }
 
 export default new CommentService();

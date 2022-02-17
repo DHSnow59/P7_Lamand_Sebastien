@@ -28,6 +28,11 @@ db.post = require("../models/post.js")(sequelize, Sequelize);
 db.comment = require("../models/comment.js")(sequelize, Sequelize);
 
 // RELATION ONETOMANY //
-
+db.comment.belongsTo(db.post, {
+    onDelete: "CASCADE",
+  });
+  db.post.hasMany(db.comment);
+  db.post.belongsTo(db.user);
+  db.user.hasMany(db.post);
 
 module.exports = db;
