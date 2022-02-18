@@ -177,4 +177,7 @@ export default {
     }
   }
 }
+.error-feedback, .form-group {
+  color: red;
+}
 </style>
