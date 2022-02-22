@@ -1,14 +1,16 @@
+//Importation du service d'authentification 
 import AuthService from "../services/auth.service";
 
+//Mise en place des status
 const user = JSON.parse(localStorage.getItem("user"));
-const initialState = user ?
-    { status: { loggedIn: true }, user} :
-    { status: { loggedIn: false }, user: null };
+const initialState = user ? { status: { loggedIn: true }, user } : { status: { loggedIn: false }, user: null };
 
+//Configuration du module d'authentification du store 
 export const auth = {
     namespaced: true,
     state: initialState,
     actions: {
+        // Gestion du login
         login({ commit }, user) {
             return AuthService.login(user).then(
                 (user) => {
@@ -21,10 +23,12 @@ export const auth = {
                 }
             );
         },
+        // Gestion du logout
         logout({ commit }) {
             AuthService.logout();
             commit("logout");
         },
+        //gestion de l'enregistrement 
         register({ commit }, user) {
             return AuthService.register(user).then(
                 (response) => {
@@ -38,6 +42,7 @@ export const auth = {
             );
         },
     },
+    //gestions des mutations pour pouvoir utiliser les variables du store tout au long de l'utilisation de l'application 
     mutations: {
         loginSuccess(state, user) {
             state.status.loggedIn = true;

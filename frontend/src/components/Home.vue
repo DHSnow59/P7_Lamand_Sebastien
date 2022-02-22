@@ -32,13 +32,16 @@
 </template>
 
 <script>
-import ArticlesService from "../services/post";
+//Importation du service posts
+import PostsService from "../services/post";
+//Importation du service comments
 import CommentsService from "../services/comment";
 
 
 export default {
   name: "Home",
   data() {
+    //Mise en place des Data a utiliser sur la page
     return {
       space: "  ",
       content: [],
@@ -47,6 +50,7 @@ export default {
     };
   },
   computed: {
+    //Récuparation de l'utilisateur connecter
     currentUser() {
       return this.$store.state.auth.user
     },
@@ -55,7 +59,8 @@ export default {
     if (!this.currentUser) {
       this.$router.push("/login");
     };
-    ArticlesService.getAllPost().then(
+    // Appel du service PostsService
+    PostsService.getAllPost().then(
       (response) => {
         this.content = response.data;
       },
@@ -70,8 +75,9 @@ export default {
     );
   },
   methods: {
+    // Appel du service DeletePost
     deletePost(id){ 
-      ArticlesService.deletePost(id)
+      PostsService.deletePost(id)
       .then((res) =>{
         console.log(res);
         location.reload();
@@ -80,6 +86,7 @@ export default {
         console.log(err);
       })
     },
+    // Appel du service deleteComments
     deleteComments(id){
       CommentsService.deleteComment(id) 
       .then((res) =>{
@@ -93,6 +100,7 @@ export default {
     checkComments(){
       this.checkComment = 1;
     },
+    // Appel  du service createComments
     createComments(id){
       const comment = {auteur: this.$store.state.auth.user.user.username, contenu: this.newCommentContent, post_id: id};
       CommentsService.createComment(comment)

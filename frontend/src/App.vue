@@ -1,3 +1,4 @@
+// Mise en place de html
 <template>
   <header class="header">
     <nav class="header__nav">
@@ -41,23 +42,28 @@
   </div>
 </template>
 
+// Script de Js de la page
 <script>
 export default {
   name: 'App',
   computed: {
+    //Vérification de la connection de l'utilisateur
     signUp() {
       return this.$store.state.status.register;
     },
+    //Récupération de l'utilisateur
     currentUser() {
       return this.$store.state.auth.user;
     },
   },
   mounted() {
+  //Si utilisateur déconnecté renvois sur la page login
     if (this.currentUser) {
       this.$router.push("/login");
     }
   },
   methods: {
+    // Gestion de la deconnection de l'utilisateur 
     logOut() {
       this.$store.dispatch("auth/logout");
       this.$router.push("/register");
@@ -66,6 +72,7 @@ export default {
 };
 </script>
 
+// Mise en place du css page
 <style lang="scss">
 body {
   @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Merriweather:ital,wght@1,700&family=Roboto:ital,wght@1,300&display=swap');

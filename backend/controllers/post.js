@@ -5,46 +5,44 @@ const fs = require('fs');
 
 // Création d'un nouveau post
 exports.createPost = (req, res) => {
-    // Create a post //
     const post = {
-      userId: req.body.userId,
-      titre: req.body.title,
-      auteur: req.body.creator,
-      user_id: req.body.userId,
-      contenu: req.body.content,
-      image_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        userId: req.body.userId,
+        titre: req.body.title,
+        auteur: req.body.creator,
+        user_id: req.body.userId,
+        contenu: req.body.content,
+        image_url: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     };
-    // Save Aricle in the database //
+    // Sauvegarde du post dans la base de donnée //
     Post.create(post)
-      .then((data) => {
-        res.send(data);
-      })
-      .catch((err) => {
-        res.status(500).send({
-          message:
-            err.message || "Some error occurred while creating the article.",
+        .then((data) => {
+            res.send(data);
+        })
+        .catch((err) => {
+            res.status(500).send({
+                message: err.message || "Erreur lors de la suppréssion du post.",
+            });
         });
-      });
-  };
+};
 
 //Suppression d'un post
 exports.deletePost = (req, res, next) => {
     const id = req.params.id
     Post.findByPk(id)
-    .then((post) => {
-        const filename = post.image_url.split('/images/')[1];
-        console.log(filename)
-        fs.unlink(`images/${filename}`, () => {
-            Post.destroy({ where: { id: req.params.id } })
-            .then(post => {
-                res.send({ message: "poste supprimé" });
-            })
-            .catch(error => res.status(500).json({ error }));
+        .then((post) => {
+            const filename = post.image_url.split('/images/')[1];
+            console.log(filename)
+            fs.unlink(`images/${filename}`, () => {
+                Post.destroy({ where: { id: req.params.id } })
+                    .then(post => {
+                        res.send({ message: "poste supprimé" });
+                    })
+                    .catch(error => res.status(500).json({ error }));
             });
-    })
-    .catch((err) => {
-      res.status(500).send({err});
-    });
+        })
+        .catch((err) => {
+            res.status(500).send({ err });
+        });
 };
 
 //Récupération de la liste des postes

@@ -74,7 +74,7 @@ export default {
         .min(6, "Must be at least 6 characters!")
         .max(40, "Must be maximum 40 characters!"),
     });
-
+//Mise en place des Data a utiliser sur la page
     return {
       successful: false,
       loading: false,
@@ -83,6 +83,7 @@ export default {
     };
   },
   methods: {
+    //Gestions de l'enregistrement via une action du store
     handleRegister(user) {
       this.message = "";
       this.successful = false;
@@ -109,6 +110,7 @@ export default {
     },
   },
   computed: {
+    //Vérification de la connection de l'utilisateur
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
     },

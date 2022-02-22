@@ -15,11 +15,13 @@
 </template>
 
 <script>
+//Importation du service User
 import UserService from "../services/user.service"
 
 export default {
   name: "Profile",
   computed: {
+    //Récuparation de l'utilisateur connecter
     currentUser() {
       return this.$store.state.auth.user;
     },
@@ -30,6 +32,7 @@ export default {
     }
   },
   methods:{
+    //Appel du service deleteUsersById
     deleteUser(id){
       UserService.deleteUsersById(id)
       .then(() =>{

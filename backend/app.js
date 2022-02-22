@@ -35,6 +35,7 @@ app.use(
 // Sécurité headers supplémentaire
 app.use(helmet());
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }))
+    //Ouverture de l'accès local image
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/users', userRoutes);
 //Nous voulons enregistrer notre routeur pour toutes les demandes effectuées vers /api/post

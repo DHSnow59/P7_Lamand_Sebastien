@@ -18,11 +18,13 @@
 </template>
 
 <script>
+//Importation du service article
 import ArticlesService from "../services/post"
 
 export default {
     name: 'Post',
     data(){
+        //Mise en place des Data a utiliser sur la page
         return{
             file: "",
             message: "",
@@ -31,6 +33,7 @@ export default {
         }
     },
     computed: {
+        //Récuparation de l'utilisateur connecter
         currentUser() {
             return this.$store.state.auth.user.user;
         },
@@ -41,7 +44,9 @@ export default {
         }
     },
     methods: {
+        //appel du service createPost
         createPost(){
+            //Création d'un form Data pour la gestion des infos et de l'image du post crée
             const formData = new FormData();
             formData.append('file', this.file, this.file.name);
             formData.append('title', this.title);
@@ -56,7 +61,8 @@ export default {
             .catch((err) =>{
                 console.log(err);
             })
-        },      
+        },     
+        //Gestion du fichier image ajouté par l'utilisateur  
         onFileSelected() {
             const file = this.$refs.file.files[0];
             this.file = file;

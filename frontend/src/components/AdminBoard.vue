@@ -14,16 +14,19 @@
 </template>
 
 <script>
+//Importation du service utilisateur
 import UserService from "../services/user.service"
 
 export default {
   name: "AdminBoard",
   data() {
+    //Mise en place des Data a utiliser sur la page
     return {
       users: [],
     };
   },
   computed: {
+    //Récuparation de l'utilisateur connecter
     currentUser() {
       return this.$store.state.auth.user;
     },
@@ -32,6 +35,7 @@ export default {
     if (!this.currentUser) {
       this.$router.push("/login");
     }
+    // Appel du service getAllUsers
     UserService.getAllUsers().then(
       (response) => {
         this.users = response.data;
@@ -42,6 +46,7 @@ export default {
     ); 
   },
   methods: {
+    // Appel du service DeleteUsersById
     deleteUser(id) {
       UserService.deleteUsersById(id)
       .then(() =>{

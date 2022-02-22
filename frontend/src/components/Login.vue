@@ -49,7 +49,7 @@ export default {
       username: yup.string().required("Username is required!"),
       password: yup.string().required("Password is required!"),
     });
-
+  //Mise en place des Data a utiliser sur la page
     return {
       loading: false,
       message: "",
@@ -57,6 +57,7 @@ export default {
     };
   },
   computed: {
+    //Vérification de la connection de l'utilisateur
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
     },
@@ -67,6 +68,7 @@ export default {
     }
   },
   methods: {
+    //enregistrement de l'utilisateur via une action du store
     handleLogin(user) {
       this.loading = true;
       this.$store.dispatch("auth/login", user).then(

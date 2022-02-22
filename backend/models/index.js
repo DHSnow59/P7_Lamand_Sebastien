@@ -4,7 +4,6 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     host: config.HOST,
     dialect: config.dialect,
-    // operatorsAliases: false, // probleme depreciation d'un boleen
 
     pool: {
         max: config.pool.max,
@@ -14,8 +13,7 @@ const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
     },
 });
 
-// Connect all the models/tables in the database to a db object,
-//so everything is accessible via one object
+//Création de l'objet Database
 const db = {};
 
 db.Sequelize = Sequelize;
@@ -30,9 +28,9 @@ db.comment = require("../models/comment.js")(sequelize, Sequelize);
 // RELATION ONETOMANY //
 db.comment.belongsTo(db.post, {
     onDelete: "CASCADE",
-  });
-  db.post.hasMany(db.comment);
-  db.post.belongsTo(db.user);
-  db.user.hasMany(db.post);
+});
+db.post.hasMany(db.comment);
+db.post.belongsTo(db.user);
+db.user.hasMany(db.post);
 
 module.exports = db;

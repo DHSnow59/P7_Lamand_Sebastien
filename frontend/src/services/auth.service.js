@@ -1,7 +1,8 @@
+//Importation axios pour les requetes
 import axios from "axios";
-
+//Création de l'URL principal
 const API_URL = "http://localhost:3000/api/users/";
-
+//Création des différent services d'authentification 
 class AuthService {
     login(user) {
         return axios
