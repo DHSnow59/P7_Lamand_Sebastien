@@ -3,9 +3,15 @@
     <router-link to="/Post"><button class="container__newPost">New Post</button></router-link>
     <div v-if="currentUser" class="container__main">
       <div :key="item.updatedAt" v-for="item in content.slice().reverse()" class="container__main__post">
-        <div class="container__main__post__creator"><p><strong>Crée par: </strong>{{ item.auteur }}</p></div>
+        <div class="container__main__post__creator"><p><strong>Crée par: </strong>{{ item.auteur }}</p>        
+        <div class="container__main__post__button">
+          <p class="container__main__post__button__date"><strong>&ensp;&ensp;Crée le: </strong>{{ item.createdAt.split("T")[0] + " à " + item.createdAt.split("T")[1].split(".")[0]}}</p>
+          <button class="container__main__post__button__field" @click="deletePost(item.id)" v-if="currentUser.user.username === item.auteur || currentUser.user.role == 1">Supprimer</button>
+        </div>
+        </div>
         <img class="container__main__post__img" :src="item.image_url"/>
-        <div class="container__main__post__title"><p><strong>Titre: </strong>{{ item.titre }}</p></div>
+        <div class="container__main__post__title"><p><strong>Titre: </strong>{{ item.titre }}</p>
+        </div>
         <div class="container__main__post__content"><p>"{{ item.contenu }}"</p></div>
         <button v-if="checkComment === 0" @click="checkComments()" class="container__main__post__buttonComment">Commenter</button>
         <div @keyup.enter="createComments(item.id)" v-if="checkComment === 1" class="container__main__post__comment">
@@ -17,12 +23,8 @@
           <div class="container__main__post__comments__content"><p>"{{ comments.contenu }}"</p></div>
           <div class="container__main__post__comments__date">
             <p class="container__main__post__comments__date__p"><strong>&ensp;&ensp;&ensp;&ensp;Crée le: </strong>{{ comments.createdAt.split("T")[0] + " à " + comments.createdAt.split("T")[1].split(".")[0] }}</p>
-            <button class="container__main__post__comments__date__button" @click="deleteComments(comments.id)" v-if="currentUser.user.username === comments.auteur || currentUser.user.role == 1">Sup</button>
+            <button class="container__main__post__comments__date__button" @click="deleteComments(comments.id)" v-if="currentUser.user.username === comments.auteur || currentUser.user.role == 1">Supprimer</button>
           </div>        
-        </div>
-        <div class="container__main__post__button">
-          <p class="container__main__post__button__date"><strong>&ensp;&ensp;Crée le: </strong>{{ item.createdAt.split("T")[0] + " à " + item.createdAt.split("T")[1].split(".")[0]}}</p>
-          <button class="container__main__post__button__field" @click="deletePost(item.id)" v-if="currentUser.user.username === item.auteur || currentUser.user.role == 1">Sup</button>
         </div>
       </div>
     </div>
@@ -117,7 +119,8 @@ export default {
     background-color: blue;
     border-radius: 5px;
     color: white;
-    border: 1px solid grey;
+    border: 2px solid grey;
+    font-weight: bold;
   }
   &__main {
     display: flex;
@@ -125,14 +128,14 @@ export default {
     align-items: center;
     &__post {
       width: 90%;
-      max-width: 50rem;
+      max-width: 55rem;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       margin-top: 1rem;
-      border: 1px solid rgb(214, 212, 212);
+      border: 3px solid rgb(214, 212, 212);
       border-radius: 15px;
-      background-color: white;
+      background-color: rgb(190, 187, 181, 0.45);
       box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 20px;
       &__creator{
         width: 100%;
@@ -143,6 +146,7 @@ export default {
         text-align: start;
         padding: 1rem 0rem 1rem 0rem;
         p{
+          color: black;
           margin: 0rem 1rem 0rem 1rem;
         }
       }
@@ -158,15 +162,18 @@ export default {
         width: 100%;
         text-align: start;
         p{
+          color: black;
            margin: 0rem 1rem 0rem 1rem;
         }
       }
       &__content{
+        color: black;
         width: 100%;
         overflow-wrap: break-word;
         margin: 1rem 0rem 0rem 0rem;
         text-align: start;
         p{
+          color: black;
           margin: 0rem 1rem 0rem 1rem;
         }
       }
@@ -180,16 +187,19 @@ export default {
         height: 1.4rem;
         color: white;
         border: 1px solid grey;
+        font-weight: bold;
       }
       &__comment{
         width: 100%;
         overflow-wrap: break-word;
         &__text{
+          color: black;
           margin: 1rem 0rem 1rem 0rem;
           width: 50%;
         }
       }
       &__comments{
+        color: black;
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -224,6 +234,7 @@ export default {
             height: 1.4rem;
             color: white;
             border: 1px solid grey;
+            font-weight: bold;
           }
         }
       }
@@ -235,9 +246,11 @@ export default {
         align-items: center;
         gap: 1rem;
         padding: 0.5rem 0rem 0.5rem 0rem;
+        margin-left: -1rem;
         &__field {
           font-family: 'Roboto', sans-serif;
           background-color: blue;
+          font-weight: bold;
           border-radius: 5px;
           height: 1.4rem;
           color: white;
